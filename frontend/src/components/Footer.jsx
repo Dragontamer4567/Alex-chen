@@ -1,9 +1,21 @@
 import React from 'react';
-import { personalInfo } from '../mock/mockData';
 import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
 
-const Footer = () => {
+const Footer = ({ profile }) => {
   const currentYear = new Date().getFullYear();
+
+  // Fallback data if profile not loaded
+  const footerData = {
+    name: profile?.name || 'Alex Chen',
+    email: profile?.email || 'alex.chen@email.com',
+    phone: profile?.phone || '+1 (555) 123-4567',
+    location: profile?.location || 'San Francisco, CA',
+    social: profile?.social || {
+      github: 'https://github.com/alexchen',
+      linkedin: 'https://linkedin.com/in/alexchen',
+      twitter: 'https://twitter.com/alexchen'
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -29,7 +41,7 @@ const Footer = () => {
                   onClick={scrollToTop}
                   className="text-2xl font-light text-white hover:opacity-70 transition-opacity duration-200"
                 >
-                  {personalInfo.name}
+                  {footerData.name}
                 </button>
                 <p className="body-regular text-gray-400 mt-4 max-w-md">
                   Frontend Developer specializing in React and modern web technologies. 
@@ -40,28 +52,34 @@ const Footer = () => {
               {/* Social Links */}
               <div className="flex items-center space-x-4">
                 <a 
-                  href={personalInfo.social.github} 
+                  href={footerData.social.github} 
                   className="footer-social-link" 
                   aria-label="GitHub"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Github className="w-5 h-5" />
                 </a>
                 <a 
-                  href={personalInfo.social.linkedin} 
+                  href={footerData.social.linkedin} 
                   className="footer-social-link" 
                   aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a 
-                  href={personalInfo.social.twitter} 
+                  href={footerData.social.twitter} 
                   className="footer-social-link" 
                   aria-label="Twitter"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Twitter className="w-5 h-5" />
                 </a>
                 <a 
-                  href={`mailto:${personalInfo.email}`} 
+                  href={`mailto:${footerData.email}`} 
                   className="footer-social-link" 
                   aria-label="Email"
                 >
@@ -94,19 +112,19 @@ const Footer = () => {
               <h3 className="heading-3 text-white">Get In Touch</h3>
               <div className="space-y-3">
                 <a 
-                  href={`mailto:${personalInfo.email}`} 
+                  href={`mailto:${footerData.email}`} 
                   className="footer-link"
                 >
-                  {personalInfo.email}
+                  {footerData.email}
                 </a>
                 <a 
-                  href={`tel:${personalInfo.phone}`} 
+                  href={`tel:${footerData.phone}`} 
                   className="footer-link"
                 >
-                  {personalInfo.phone}
+                  {footerData.phone}
                 </a>
                 <span className="block text-gray-400 text-sm">
-                  {personalInfo.location}
+                  {footerData.location}
                 </span>
               </div>
             </div>
@@ -117,7 +135,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2 text-gray-400 text-sm">
-              <span>&copy; {currentYear} {personalInfo.name}. All rights reserved.</span>
+              <span>&copy; {currentYear} {footerData.name}. All rights reserved.</span>
             </div>
             
             <div className="flex items-center space-x-2 text-gray-400 text-sm">

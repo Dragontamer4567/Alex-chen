@@ -1,11 +1,22 @@
 import React from 'react';
-import { services } from '../mock/mockData';
 import { ArrowRight, Check } from 'lucide-react';
 
-const Services = () => {
+const Services = ({ services = [] }) => {
   const scrollToContact = () => {
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (!services.length) {
+    return (
+      <section id="services" className="section-padding">
+        <div className="max-w-7xl mx-auto px-8 lg:px-16">
+          <div className="text-center">
+            <div className="loading-dots text-xl mb-4">Loading services...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="services" className="section-padding">

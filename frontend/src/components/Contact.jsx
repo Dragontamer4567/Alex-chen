@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { personalInfo, submitContactForm } from '../mock/mockData';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import { portfolioAPI } from '../services/api';
 
-const Contact = () => {
+const Contact = ({ profile }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +12,18 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  // Fallback data if profile not loaded
+  const contactInfo = {
+    email: profile?.email || 'alex.chen@email.com',
+    phone: profile?.phone || '+1 (555) 123-4567',
+    location: profile?.location || 'San Francisco, CA',
+    social: profile?.social || {
+      github: 'https://github.com/alexchen',
+      linkedin: 'https://linkedin.com/in/alexchen',
+      twitter: 'https://twitter.com/alexchen'
+    }
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -25,19 +37,21 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await submitContactForm(formData);
+      const response = await portfolioAPI.submitContactForm(formData);
       
-      if (response.success) {
-        toast({
-          title: "Message sent!",
-          description: response.message,
-        });
-        setFormData({ name: '', email: '', company: '', message: '' });
-      }
+      toast({
+        title: "Message sent!",
+        description: response.message,
+      });
+      
+      // Reset form
+      setFormData({ name: '', email: '', company: '', message: '' });
+      
     } catch (error) {
+      console.error('Contact form error:', error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: error.message || "Failed to send message. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -79,8 +93,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="heading-3">Email</h4>
-                  <a href={`mailto:${personalInfo.email}`} className="body-regular text-gray-600 hover:text-black transition-colors duration-200">
-                    {personalInfo.email}
+                  <a href={`mailto:${contactInfo.email}`} className="body-regular text-gray-600 hover:text-black transition-colors duration-200">
+                    {contactInfo.email}
                   </a>
                 </div>
               </div>
@@ -91,8 +105,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="heading-3">Phone</h4>
-                  <a href={`tel:${personalInfo.phone}`} className="body-regular text-gray-600 hover:text-black transition-colors duration-200">
-                    {personalInfo.phone}
+                  <a href={`tel:${contactInfo.phone}`} className="body-regular text-gray-600 hover:text-black transition-colors duration-200">
+                    {contactInfo.phone}
                   </a>
                 </div>
               </div>
@@ -103,7 +117,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="heading-3">Location</h4>
-                  <span className="body-regular text-gray-600">{personalInfo.location}</span>
+                  <span className="body-regular text-gray-600">{contactInfo.location}</span>
                 </div>
               </div>
             </div>
@@ -112,13 +126,13 @@ const Contact = () => {
             <div className="space-y-4">
               <h4 className="heading-3">Connect With Me</h4>
               <div className="flex space-x-4">
-                <a href={personalInfo.social.github} className="social-link" aria-label="GitHub">
+                <a href={contactInfo.social.github} className="social-link" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5" />
                 </a>
-                <a href={personalInfo.social.linkedin} className="social-link" aria-label="LinkedIn">
+                <a href={contactInfo.social.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a href={personalInfo.social.twitter} className="social-link" aria-label="Twitter">
+                <a href={contactInfo.social.twitter} className="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                   <Twitter className="w-5 h-5" />
                 </a>
               </div>
@@ -149,6 +163,7 @@ const Contact = () => {
                     required
                     className="contact-input"
                     placeholder="Your full name"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="space-y-2">
@@ -162,6 +177,7 @@ const Contact = () => {
                     required
                     className="contact-input"
                     placeholder="your@email.com"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -176,6 +192,7 @@ const Contact = () => {
                   onChange={handleInputChange}
                   className="contact-input"
                   placeholder="Your company name (optional)"
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -190,6 +207,7 @@ const Contact = () => {
                   rows={6}
                   className="contact-input resize-none"
                   placeholder="Tell me about your project, timeline, and any specific requirements..."
+                  disabled={isSubmitting}
                 />
               </div>
 

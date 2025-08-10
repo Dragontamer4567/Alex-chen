@@ -1,8 +1,19 @@
 import React from 'react';
-import { testimonials } from '../mock/mockData';
 import { Star, Quote } from 'lucide-react';
 
-const Testimonials = () => {
+const Testimonials = ({ testimonials = [] }) => {
+  if (!testimonials.length) {
+    return (
+      <section id="testimonials" className="section-padding">
+        <div className="max-w-7xl mx-auto px-8 lg:px-16">
+          <div className="text-center">
+            <div className="loading-dots text-xl mb-4">Loading testimonials...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="testimonials" className="section-padding">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">

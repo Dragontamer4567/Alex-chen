@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
-import { projects } from '../mock/mockData';
+import React from 'react';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
 
-const Projects = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
+const Projects = ({ projects = [] }) => {
+  if (!projects.length) {
+    return (
+      <section id="projects" className="section-padding bg-gray-50">
+        <div className="max-w-7xl mx-auto px-8 lg:px-16">
+          <div className="text-center">
+            <div className="loading-dots text-xl mb-4">Loading projects...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="projects" className="section-padding bg-gray-50">
@@ -40,10 +49,10 @@ const Projects = () => {
                   {/* Project Links Overlay */}
                   <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-80 transition-all duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
                     <div className="flex space-x-4">
-                      <a href={project.liveUrl} className="text-white hover:text-gray-300 p-3 bg-white/20 backdrop-blur-sm">
+                      <a href={project.live_url || project.liveUrl} className="text-white hover:text-gray-300 p-3 bg-white/20 backdrop-blur-sm" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-6 h-6" />
                       </a>
-                      <a href={project.githubUrl} className="text-white hover:text-gray-300 p-3 bg-white/20 backdrop-blur-sm">
+                      <a href={project.github_url || project.githubUrl} className="text-white hover:text-gray-300 p-3 bg-white/20 backdrop-blur-sm" target="_blank" rel="noopener noreferrer">
                         <Github className="w-6 h-6" />
                       </a>
                     </div>
@@ -89,11 +98,11 @@ const Projects = () => {
 
                   {/* Project Links */}
                   <div className="flex space-x-4 pt-4">
-                    <a href={project.liveUrl} className="btn-secondary">
+                    <a href={project.live_url || project.liveUrl} className="btn-secondary" target="_blank" rel="noopener noreferrer">
                       View Live Site
                       <ExternalLink className="ml-2 w-4 h-4" />
                     </a>
-                    <a href={project.githubUrl} className="btn-icon">
+                    <a href={project.github_url || project.githubUrl} className="btn-icon" target="_blank" rel="noopener noreferrer">
                       View Code
                       <Github className="ml-2 w-4 h-4" />
                     </a>
