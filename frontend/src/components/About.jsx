@@ -1,8 +1,14 @@
 import React from 'react';
-import { skills } from '../mock/mockData';
 import { Code, Palette, Zap, Users } from 'lucide-react';
 
-const About = () => {
+const About = ({ profile }) => {
+  // Fallback skills if profile not loaded
+  const skills = profile?.skills || [
+    "React", "TypeScript", "Next.js", "JavaScript", "HTML5", "CSS3",
+    "Tailwind CSS", "Sass", "Redux", "Context API", "React Router",
+    "Webpack", "Vite", "Jest", "React Testing Library", "Git", "Figma"
+  ];
+
   return (
     <section id="about" className="section-padding bg-gray-50">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">

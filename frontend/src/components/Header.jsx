@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
-const Header = () => {
+const Header = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (sectionId) => {
@@ -11,6 +11,9 @@ const Header = () => {
       setIsMenuOpen(false);
     }
   };
+
+  // Fallback name if profile not loaded
+  const displayName = profile?.name || 'Alex Chen';
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
@@ -22,7 +25,7 @@ const Header = () => {
               onClick={() => scrollToSection('hero')}
               className="text-2xl font-light text-black tracking-wide hover:opacity-70 transition-opacity duration-200"
             >
-              Alex Chen
+              {displayName}
             </button>
           </div>
 

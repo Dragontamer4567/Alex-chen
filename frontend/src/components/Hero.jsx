@@ -1,13 +1,23 @@
 import React from 'react';
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 
-const Hero = () => {
+const Hero = ({ profile }) => {
   const scrollToContact = () => {
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
   };
 
   const scrollToWork = () => {
     document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Fallback data if profile not loaded
+  const displayData = {
+    name: profile?.name || 'Alex Chen',
+    title: profile?.title || 'Frontend Developer',
+    social: profile?.social || {
+      github: 'https://github.com/alexchen',
+      linkedin: 'https://linkedin.com/in/alexchen'
+    }
   };
 
   return (
@@ -18,7 +28,7 @@ const Hero = () => {
           <div className="space-y-8">
             <div className="space-y-6">
               <h1 className="hero-large leading-tight">
-                Frontend Developer
+                {displayData.title}
                 <br />
                 <span className="text-gray-600">Building Digital Experiences</span>
               </h1>
@@ -42,13 +52,13 @@ const Hero = () => {
 
             {/* Social Links */}
             <div className="flex items-center space-x-6 pt-4">
-              <a href="#" className="social-link" aria-label="GitHub">
+              <a href={displayData.social.github} className="social-link" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
                 <Github className="w-5 h-5" />
               </a>
-              <a href="#" className="social-link" aria-label="LinkedIn">
+              <a href={displayData.social.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="social-link" aria-label="Email">
+              <a href={`mailto:${profile?.email || 'alex.chen@email.com'}`} className="social-link" aria-label="Email">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
